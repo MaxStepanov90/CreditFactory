@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface AirPlaneRatingRepository extends JpaRepository<AirPlaneRating, Long> {
     @Query("FROM AirPlaneRating r WHERE r.airPlaneId=:id AND r.dateOfEvaluation = " +
             "(SELECT MAX(r.dateOfEvaluation) FROM AirPlaneRating r WHERE r.airPlaneId=:id)")
-    AirPlaneRating findRatingByAirPlaneIdMaxDate(Long id);
+    AirPlaneRating findMaxDateRatingByAirPlaneId(Long id);
 }

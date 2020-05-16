@@ -4,8 +4,8 @@ import com.mcb.creditfactory.dto.CarDto;
 import com.mcb.creditfactory.external.ExternalApproveService;
 import com.mcb.creditfactory.model.Car;
 import com.mcb.creditfactory.model.CarRating;
-import com.mcb.creditfactory.repository.CarRatingRepository;
 import com.mcb.creditfactory.repository.CarRepository;
+import com.mcb.creditfactory.service.rating.CarRatingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,25 +18,23 @@ public class CarServiceImpl implements CarService {
 
     private final ExternalApproveService approveService;
     private final CarRepository carRepository;
-    private final CarRatingRepository carRatingRepository;
+    private final CarRatingService carRatingService;
 
     @Autowired
     public CarServiceImpl(ExternalApproveService approveService, CarRepository carRepository,
-                          CarRatingRepository carRatingRepository) {
+                          CarRatingService carRatingService) {
         this.approveService = approveService;
         this.carRepository = carRepository;
-        this.carRatingRepository = carRatingRepository;
+        this.carRatingService = carRatingService;
     }
 
     @Override
-    public CarDto checkDateRating(CarDto dto) {
-        CarRating foundRating = carRatingRepository.findRatingByCarIdMaxDate(dto.getId());
-        log.info("find rating with latest date by car_id: {} latest date: {} value: {}",
-                foundRating.getCarId(), foundRating.getDateOfEvaluation(), foundRating.getValue());
+    public CarDto getDateRating(CarDto dto) {
+        CarRating foundRating = carRatingService.findMaxDateRatingByCarId(dto.getId());
         dto.setValue(foundRating.getValue());
         dto.setAssessDate(foundRating.getDateOfEvaluation());
-        log.info("carDto with id: {} setValue: {} setAssessDate: {} of rating with id: {} with latest date",
-                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId());
+        log.info("carDto with id: {} setValue: {} setAssessDate: {} of carRating with id: {} with latest date: {}",
+                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
         return dto;
     }
 
@@ -68,9 +66,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarDto toDTO(Car car) {
-        CarRating foundRating = carRatingRepository.findRatingByCarIdMaxDate(car.getId());
-        log.info("find rating with latest date by car_id: {} latest date: {} value: {}",
-                foundRating.getCarId(), foundRating.getDateOfEvaluation(), foundRating.getValue());
+        CarRating foundRating = carRatingService.findMaxDateRatingByCarId(car.getId());
         return CarDto.builder()
                 .id(car.getId())
                 .brand(car.getBrand())
@@ -86,5 +82,4 @@ public class CarServiceImpl implements CarService {
     public Long getId(Car car) {
         return car.getId();
     }
-
 }

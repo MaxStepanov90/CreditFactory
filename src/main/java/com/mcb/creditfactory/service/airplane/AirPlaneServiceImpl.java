@@ -4,8 +4,8 @@ import com.mcb.creditfactory.dto.AirPlaneDto;
 import com.mcb.creditfactory.external.ExternalApproveService;
 import com.mcb.creditfactory.model.AirPlane;
 import com.mcb.creditfactory.model.AirPlaneRating;
-import com.mcb.creditfactory.repository.AirPlaneRatingRepository;
 import com.mcb.creditfactory.repository.AirPlaneRepository;
+import com.mcb.creditfactory.service.rating.AirPlaneRatingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,26 +18,24 @@ public class AirPlaneServiceImpl implements AirPlaneService {
 
     private final ExternalApproveService approveService;
     private final AirPlaneRepository airPlaneRepository;
-    private final AirPlaneRatingRepository airPlaneRatingRepository;
+    private final AirPlaneRatingService airPlaneRatingService;
 
     @Autowired
     public AirPlaneServiceImpl(ExternalApproveService approveService,
                                AirPlaneRepository airPlaneRepository,
-                               AirPlaneRatingRepository airPlaneRatingRepository) {
+                               AirPlaneRatingService airPlaneRatingService) {
         this.approveService = approveService;
         this.airPlaneRepository = airPlaneRepository;
-        this.airPlaneRatingRepository = airPlaneRatingRepository;
+        this.airPlaneRatingService = airPlaneRatingService;
     }
 
     @Override
-    public AirPlaneDto checkDateRating(AirPlaneDto dto) {
-        AirPlaneRating foundRating = airPlaneRatingRepository.findRatingByAirPlaneIdMaxDate(dto.getId());
-        log.info("find rating with latest date by airPlane_id: {} latest date: {} value: {}",
-                foundRating.getAirPlaneId(), foundRating.getDateOfEvaluation(), foundRating.getValue());
+    public AirPlaneDto getDateRating(AirPlaneDto dto) {
+        AirPlaneRating foundRating = airPlaneRatingService.findMaxDateRatingByAirPlaneId(dto.getId());
         dto.setValue(foundRating.getValue());
         dto.setAssessDate(foundRating.getDateOfEvaluation());
-        log.info("airPlaneDto with id: {} setValue: {} setAssessDate: {} of rating with id: {} with latest date",
-                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId());
+        log.info("airPlaneDto with id: {} setValue: {} setAssessDate: {} of airPlaneRating with id: {} with latest date: {}",
+                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
         return dto;
     }
 
@@ -71,9 +69,7 @@ public class AirPlaneServiceImpl implements AirPlaneService {
 
     @Override
     public AirPlaneDto toDTO(AirPlane plane) {
-        AirPlaneRating foundRating = airPlaneRatingRepository.findRatingByAirPlaneIdMaxDate(plane.getId());
-        log.info("find rating with latest date by airPlane_id: {} latest date: {} value: {}",
-                foundRating.getAirPlaneId(), foundRating.getDateOfEvaluation(), foundRating.getValue());
+        AirPlaneRating foundRating = airPlaneRatingService.findMaxDateRatingByAirPlaneId(plane.getId());
         return AirPlaneDto.builder()
                 .id(plane.getId())
                 .brand(plane.getBrand())
@@ -91,5 +87,4 @@ public class AirPlaneServiceImpl implements AirPlaneService {
     public Long getId(AirPlane plane) {
         return plane.getId();
     }
-
 }

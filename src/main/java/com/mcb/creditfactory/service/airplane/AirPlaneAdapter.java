@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AirPlaneAdapter implements CollateralObject {
 
-    private AirPlaneDto airPlane;
+    private final AirPlaneDto airPlane;
 
     @Override
     public BigDecimal getValue() {

@@ -22,4 +22,5 @@ public class CarDto implements Collateral {
     private Short year;
     private LocalDate assessDate;
     private BigDecimal value;
+
 }

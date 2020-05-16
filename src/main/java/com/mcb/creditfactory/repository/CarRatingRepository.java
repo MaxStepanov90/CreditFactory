@@ -10,5 +10,5 @@ public interface CarRatingRepository extends JpaRepository<CarRating, Long> {
 
     @Query("From CarRating r WHERE r.carId=:id and r.dateOfEvaluation = " +
             "(select MAX(r.dateOfEvaluation) from CarRating r WHERE r.carId=:id)")
-    CarRating findRatingByCarIdMaxDate(Long id);
+    CarRating findMaxDateRatingByCarId(Long id);
 }
