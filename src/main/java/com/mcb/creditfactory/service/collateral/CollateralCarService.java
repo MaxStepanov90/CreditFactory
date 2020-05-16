@@ -43,5 +43,4 @@ public class CollateralCarService implements CollateralFactoryService {
                 .map(service::toDTO)
                 .orElse(null);
     }
-
 }

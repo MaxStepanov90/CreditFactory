@@ -31,10 +31,14 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDto getDateRating(CarDto dto) {
         CarRating foundRating = carRatingService.findMaxDateRatingByCarId(dto.getId());
-        dto.setValue(foundRating.getValue());
-        dto.setAssessDate(foundRating.getDateOfEvaluation());
-        log.info("carDto with id: {} setValue: {} setAssessDate: {} of carRating with id: {} with latest date: {}",
-                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
+        if (foundRating != null) {
+            dto.setValue(foundRating.getValue());
+            dto.setAssessDate(foundRating.getDateOfEvaluation());
+            log.info("carDto with id: {} setValue: {} setAssessDate: {} of carRating with id: {} with latest date: {}",
+                    dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
+        } else {
+            log.info("foundRating with car_id: {} not exist", dto.getId());
+        }
         return dto;
     }
 

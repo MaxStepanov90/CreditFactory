@@ -27,7 +27,10 @@ public class CollateralService {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public Long saveCollateral(Collateral object) { return createServiceByInstance(object).saveCollateral(object); }
+
+    public Long saveCollateral(Collateral object) {
+        return createServiceByInstance(object).saveCollateral(object);
+    }
 
     public Collateral getInfo(Collateral object) {
         return createServiceByInstance(object).getInfo(object);

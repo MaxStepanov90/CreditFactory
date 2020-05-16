@@ -32,10 +32,14 @@ public class AirPlaneServiceImpl implements AirPlaneService {
     @Override
     public AirPlaneDto getDateRating(AirPlaneDto dto) {
         AirPlaneRating foundRating = airPlaneRatingService.findMaxDateRatingByAirPlaneId(dto.getId());
-        dto.setValue(foundRating.getValue());
-        dto.setAssessDate(foundRating.getDateOfEvaluation());
-        log.info("airPlaneDto with id: {} setValue: {} setAssessDate: {} of airPlaneRating with id: {} with latest date: {}",
-                dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
+        if (foundRating != null) {
+            dto.setValue(foundRating.getValue());
+            dto.setAssessDate(foundRating.getDateOfEvaluation());
+            log.info("airPlaneDto with id: {} setValue: {} setAssessDate: {} of airPlaneRating with id: {} with latest date: {}",
+                    dto.getId(), dto.getValue(), dto.getAssessDate(), foundRating.getId(), foundRating.getDateOfEvaluation());
+        } else {
+            log.info("foundRating with airPlane_id: {} not exist", dto.getId());
+        }
         return dto;
     }
 
