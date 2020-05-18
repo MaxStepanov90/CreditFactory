@@ -5,8 +5,8 @@ import com.mcb.creditfactory.dto.CarDto;
 import com.mcb.creditfactory.dto.Collateral;
 import com.mcb.creditfactory.factory.AirPlaneFactory;
 import com.mcb.creditfactory.factory.CarFactory;
-import com.mcb.creditfactory.factory.CollateralFactory;
-import com.mcb.creditfactory.factory.CollateralFactoryService;
+import com.mcb.creditfactory.factory.CollateralObjectFactory;
+import com.mcb.creditfactory.factory.CollateralObjectService;
 import com.mcb.creditfactory.service.collateral.CollateralAirPlaneService;
 import com.mcb.creditfactory.service.collateral.CollateralCarService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +36,12 @@ public class CollateralService {
         return createServiceByInstance(object).getInfo(object);
     }
 
-    public CollateralFactoryService createServiceByInstance(Collateral object){
-        CollateralFactory factory = createFactoryByInstance(object);
-        return factory.createFactoryService();
+    public CollateralObjectService createServiceByInstance(Collateral object){
+        CollateralObjectFactory factory = createFactoryByInstance(object);
+        return factory.createObjectService();
     }
 
-    public CollateralFactory createFactoryByInstance(Collateral object) {
+    public CollateralObjectFactory createFactoryByInstance(Collateral object) {
         if (object instanceof CarDto) {
             return new CarFactory(carService);
         } else if (object instanceof AirPlaneDto) {

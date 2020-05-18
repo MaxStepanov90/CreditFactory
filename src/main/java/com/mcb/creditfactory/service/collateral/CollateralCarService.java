@@ -2,7 +2,7 @@ package com.mcb.creditfactory.service.collateral;
 
 import com.mcb.creditfactory.dto.CarDto;
 import com.mcb.creditfactory.dto.Collateral;
-import com.mcb.creditfactory.factory.CollateralFactoryService;
+import com.mcb.creditfactory.factory.CollateralObjectService;
 import com.mcb.creditfactory.service.car.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CollateralCarService implements CollateralFactoryService {
+public class CollateralCarService implements CollateralObjectService {
 
     private final CarService service;
 

@@ -2,7 +2,7 @@ package com.mcb.creditfactory.factory;
 
 import com.mcb.creditfactory.service.collateral.CollateralCarService;
 
-public class CarFactory implements CollateralFactory {
+public class CarFactory implements CollateralObjectFactory {
 
     private final CollateralCarService carService;
 
@@ -11,7 +11,7 @@ public class CarFactory implements CollateralFactory {
     }
 
     @Override
-    public CollateralFactoryService createFactoryService() {
+    public CollateralObjectService createObjectService() {
         return carService;
     }
 }
